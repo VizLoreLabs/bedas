@@ -1,0 +1,808 @@
+{
+	"info": {
+		"_postman_id": "7254d3eb-dce2-4693-9fd4-838d6aec822e",
+		"name": "SRCInfonet",
+		"description": "Collection of APIs for VLF HF Agent.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register and Enrol User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c4504905-41ec-4f4a-97fd-33187d44d405",
+						"exec": [
+							"pm.test(pm.info.requestName, () => {",
+							"    pm.response.to.not.be.error;",
+							"    pm.response.to.not.have.jsonBody('error');",
+							"});",
+							"pm.environment.set(\"token\", pm.response.json().token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"demoSasa4\",\n\t\"orgName\": \"SRCInfonet\",\n\t\"role\": \"client\",\n\t\"secret\": \"494bf6f685fd0ca8a4cc98b317aa8396\"\n}\n\n"
+				},
+				"url": {
+					"raw": "http://{{url}}/users/register",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"register"
+					]
+				},
+				"description": "Generated from a curl request: \ncurl -s -X POST http://localhost:4000/users -H \\\"content-type: application/x-www-form-urlencoded\\\" -d 'username=agileApp221&orgName=Org1'\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Install Smart Contract",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "content-type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"peers\": [\n\t\t\"peer0.machine1.chainrider.dozdravnika.si\", \n\t\t\"peer1.machine1.chainrider.dozdravnika.si\"\n\t],\n\t\"chaincodeName\":\"reservations_v1\",\n\t\"chaincodePath\":\"/home/chainrider-f257b/smart_contracts/reservation\",\n\t\"chaincodeType\": \"node\",\n\t\"chaincodeVersion\":\"v1\"\n}\n\n"
+				},
+				"url": {
+					"raw": "http://{{url}}/chaincodes",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"chaincodes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Instantiate Smart Contract",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"peers\": [\"peer0.machine1.chainrider.dozdravnika.si\"],\n\t\"chaincodeName\": \"reservations_v1\",\n\t\"chaincodeVersion\": \"v1\",\n\t\"chaincodeType\": \"node\",\n\t\"args\": [\"\"],\n\t\"policy\":{\n\t\t\"identities\": [\n\t\t\t{\"role\": \n\t\t\t\t{\n\t\t\t\t\t\"name\": \"member\", \n\t\t\t\t\t\"mspId\": \"SRCInfonetMSP\"\n\t\t\t\t} \n\t\t\t}, \n\t\t\t{\"role\": \n\t\t\t\t{\n\t\t\t\t\t\"name\": \"member\", \n\t\t\t\t\t\"mspId\": \"HealthInstitutionMSP\" \n\t\t\t\t} \n\t\t\t}, \n\t\t\t{\"role\": \n\t\t\t\t{\n\t\t\t\t\t\"name\": \"member\", \n\t\t\t\t\t\"mspId\": \"MinistryOfHealthMSP\" \n\t\t\t\t} \n\t\t\t}\n\t\t],\n\t\t\"policy\": {\n\t\t\t\"3-of\":[\n\t\t\t\t{\n\t\t\t\t\t\"signed-by\": 0\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"signed-by\": 1\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"signed-by\": 2\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://{{url}}/channels/{{channel_name}}/chaincodes",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"channels",
+						"{{channel_name}}",
+						"chaincodes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invoke Transaction - confirmReservation",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"peers\": [\"peer0.machine1.chainrider.dozdravnika.si\", \"peer0.machine1.healthinstitution.com\", \"peer0.machine1.ministryofhealth.com\"],\n    \"fcn\": \"confirmReservation\",\n\t\"args\": [\"resIdExample7\", \"1561376861\", \"orgIdExample1\", \"userIdExample1\", \"doctorIdExample1\", \"1561488999\"]\n}"
+				},
+				"url": {
+					"raw": "http://{{url}}/channels/{{channel_name}}/chaincodes/{{chaincode_name}}",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"channels",
+						"{{channel_name}}",
+						"chaincodes",
+						"{{chaincode_name}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invoke Transaction - cancelReservation",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"peers\": [\"peer0.machine1.chainrider.dozdravnika.si\", \"peer0.machine1.healthinstitution.com\", \"peer0.machine1.ministryofhealth.com\"],\n    \"fcn\": \"cancelReservation\",\n\t\"args\": [\"resIdExample7\"]\n}"
+				},
+				"url": {
+					"raw": "http://{{url}}/channels/{{channel_name}}/chaincodes/{{chaincode_name}}",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"channels",
+						"{{channel_name}}",
+						"chaincodes",
+						"{{chaincode_name}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invoke Transaction - rejectReservation",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"peers\": [\"peer0.machine1.chainrider.dozdravnika.si\", \"peer0.machine1.healthinstitution.com\", \"peer0.machine1.ministryofhealth.com\"],\n    \"fcn\": \"rejectReservation\",\n\t\"args\": [\"resIdExample7\"]\n}"
+				},
+				"url": {
+					"raw": "http://{{url}}/channels/{{channel_name}}/chaincodes/{{chaincode_name}}",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"channels",
+						"{{channel_name}}",
+						"chaincodes",
+						"{{chaincode_name}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Smart Contract - ReadById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{url}}/channels/{{channel_name}}/chaincodes/{{chaincode_name}}?peer={{peer_name}}&fcn=readReservationById&args=[\"resIdExample7\"]",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"channels",
+						"{{channel_name}}",
+						"chaincodes",
+						"{{chaincode_name}}"
+					],
+					"query": [
+						{
+							"key": "peer",
+							"value": "{{peer_name}}"
+						},
+						{
+							"key": "fcn",
+							"value": "readReservationById"
+						},
+						{
+							"key": "args",
+							"value": "[\"resIdExample7\"]"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Smart Contract - All reservations",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{url}}/channels/{{channel_name}}/chaincodes/{{chaincode_name}}?peer={{peer_name}}&fcn=queryAssets&args=[\"{\\\"selector\\\": { \\\"docType\\\": \\\"reservation\\\" } }\"]",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"channels",
+						"{{channel_name}}",
+						"chaincodes",
+						"{{chaincode_name}}"
+					],
+					"query": [
+						{
+							"key": "peer",
+							"value": "{{peer_name}}"
+						},
+						{
+							"key": "fcn",
+							"value": "queryAssets"
+						},
+						{
+							"key": "args",
+							"value": "[\"{\\\"selector\\\": { \\\"docType\\\": \\\"reservation\\\" } }\"]"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Smart Contract - Query By Id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{url}}/channels/{{channel_name}}/chaincodes/{{chaincode_name}}?peer={{peer_name}}&fcn=queryAssets&args=[\"{\\\"selector\\\": { \\\"id\\\":  \\\"resIdExample7\\\" } }\"]",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"channels",
+						"{{channel_name}}",
+						"chaincodes",
+						"{{chaincode_name}}"
+					],
+					"query": [
+						{
+							"key": "peer",
+							"value": "{{peer_name}}"
+						},
+						{
+							"key": "fcn",
+							"value": "queryAssets"
+						},
+						{
+							"key": "args",
+							"value": "[\"{\\\"selector\\\": { \\\"id\\\":  \\\"resIdExample7\\\" } }\"]"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Smart Contract - All canceled",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{url}}/channels/{{channel_name}}/chaincodes/{{chaincode_name}}?peer={{peer_name}}&fcn=queryAssets&args=[\"{\\\"selector\\\": { \\\"Canceled\\\": true} }\"]",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"channels",
+						"{{channel_name}}",
+						"chaincodes",
+						"{{chaincode_name}}"
+					],
+					"query": [
+						{
+							"key": "peer",
+							"value": "{{peer_name}}"
+						},
+						{
+							"key": "fcn",
+							"value": "queryAssets"
+						},
+						{
+							"key": "args",
+							"value": "[\"{\\\"selector\\\": { \\\"Canceled\\\": true} }\"]"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Smart Contract - All rejected",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{url}}/channels/{{channel_name}}/chaincodes/{{chaincode_name}}?peer={{peer_name}}&fcn=queryAssets&args=[\"{\\\"selector\\\": { \\\"Rejected\\\": true} }\"]",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"channels",
+						"{{channel_name}}",
+						"chaincodes",
+						"{{chaincode_name}}"
+					],
+					"query": [
+						{
+							"key": "peer",
+							"value": "{{peer_name}}"
+						},
+						{
+							"key": "fcn",
+							"value": "queryAssets"
+						},
+						{
+							"key": "args",
+							"value": "[\"{\\\"selector\\\": { \\\"Rejected\\\": true} }\"]"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Smart Contract - From date and not canceled",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{url}}/channels/{{channel_name}}/chaincodes/{{chaincode_name}}?peer={{peer_name}}&fcn=queryAssets&args=[\"{\\\"selector\\\": { \\\"$and\\\": [ { \\\"Canceled\\\": false },{ \\\"ReservationTime\\\": { \\\"$gt\\\":1561378890} }] } } \"]",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"channels",
+						"{{channel_name}}",
+						"chaincodes",
+						"{{chaincode_name}}"
+					],
+					"query": [
+						{
+							"key": "peer",
+							"value": "{{peer_name}}"
+						},
+						{
+							"key": "fcn",
+							"value": "queryAssets"
+						},
+						{
+							"key": "args",
+							"value": "[\"{\\\"selector\\\": { \\\"$and\\\": [ { \\\"Canceled\\\": false },{ \\\"ReservationTime\\\": { \\\"$gt\\\":1561378890} }] } } \"]"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Block",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "content-type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{url}}/channels/{{channel_name}}/blocks/{{block_number}}?peer={{peer_name}}",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"channels",
+						"{{channel_name}}",
+						"blocks",
+						"{{block_number}}"
+					],
+					"query": [
+						{
+							"key": "peer",
+							"value": "{{peer_name}}"
+						}
+					]
+				},
+				"description": "Generated from a curl request: \ncurl -s -X GET \\\n  \\\"http://localhost:4000/channels/mychannel/blocks/1?peer=peer0.org1.example.com\\\" \\\n  -H \\\"authorization: Bearer <put JSON Web Token here>\\\" \\\n  -H \\\"content-type: application/json\\\""
+			},
+			"response": []
+		},
+		{
+			"name": "Query Transaction",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{url}}/channels/{{channel_name}}/transactions/{{txid}}?peer={{peer_name}}",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"channels",
+						"{{channel_name}}",
+						"transactions",
+						"{{txid}}"
+					],
+					"query": [
+						{
+							"key": "peer",
+							"value": "{{peer_name}}"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Blockchain Info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "content-type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{url}}/channels/{{channel_name}}?peer={{peer_name}}",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"channels",
+						"{{channel_name}}"
+					],
+					"query": [
+						{
+							"key": "peer",
+							"value": "{{peer_name}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Installed Smart Contract",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{url}}/chaincodes?peer={{peer_name}}&type=installed",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"chaincodes"
+					],
+					"query": [
+						{
+							"key": "peer",
+							"value": "{{peer_name}}"
+						},
+						{
+							"key": "type",
+							"value": "installed"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Instantiated Smart Contract",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{url}}/chaincodes?peer={{peer_name}}&type=instantiated",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"chaincodes"
+					],
+					"query": [
+						{
+							"key": "peer",
+							"value": "{{peer_name}}"
+						},
+						{
+							"key": "type",
+							"value": "instantiated"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Peer Channels",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{url}}/channels?peer={{peer_name}}",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"channels"
+					],
+					"query": [
+						{
+							"key": "peer",
+							"value": "{{peer_name}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
