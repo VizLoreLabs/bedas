@@ -1,0 +1,122 @@
+version: '2'
+networks:
+  basic: {}
+services:
+  orderer0.orderer.com:
+    container_name: orderer0.orderer.com
+    image: 'vizlore/fabric-orderer:latest'
+    restart: always
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - >-
+        ORDERER_GENERAL_GENESISFILE=/etc/hyperledger/configtx/config/genesis_block.pb
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/msp/orderer/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    ports:
+      - '7050:7050'
+    volumes:
+      - './:/etc/hyperledger/configtx'
+      - >-
+        ./crypto-config/ordererOrganizations/orderer.com/orderers/orderer0.orderer.com/msp:/etc/hyperledger/msp/orderer/msp
+    networks:
+      - basic
+  zookeeper0.orderer.com:
+    container_name: zookeeper0.orderer.com
+    image: vizlore/fabric-zookeeper
+    restart: always
+    environment:
+      - ZOO_MY_ID=1
+      - >-
+        ZOO_SERVERS=server.1=zookeeper0.orderer.com:2888:3888
+        server.2=zookeeper1.orderer.com:2888:3888
+        server.3=zookeeper2.orderer.com:2888:3888 
+    networks:
+      - basic
+  zookeeper1.orderer.com:
+    container_name: zookeeper1.orderer.com
+    image: vizlore/fabric-zookeeper
+    restart: always
+    environment:
+      - ZOO_MY_ID=2
+      - >-
+        ZOO_SERVERS=server.1=zookeeper0.orderer.com:2888:3888
+        server.2=zookeeper1.orderer.com:2888:3888
+        server.3=zookeeper2.orderer.com:2888:3888 
+    networks:
+      - basic
+  zookeeper2.orderer.com:
+    container_name: zookeeper2.orderer.com
+    image: vizlore/fabric-zookeeper
+    restart: always
+    environment:
+      - ZOO_MY_ID=3
+      - >-
+        ZOO_SERVERS=server.1=zookeeper0.orderer.com:2888:3888
+        server.2=zookeeper1.orderer.com:2888:3888
+        server.3=zookeeper2.orderer.com:2888:3888 
+    networks:
+      - basic
+  kafka0.orderer.com:
+    container_name: kafka0.orderer.com
+    image: vizlore/fabric-kafka
+    restart: always
+    environment:
+      - KAFKA_BROKER_ID=0
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - >-
+        KAFKA_ZOOKEEPER_CONNECT=zookeeper0.orderer.com:2181,zookeeper1.orderer.com:2181,zookeeper2.orderer.com:2181
+    networks:
+      - basic
+  kafka1.orderer.com:
+    container_name: kafka1.orderer.com
+    image: vizlore/fabric-kafka
+    restart: always
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - >-
+        KAFKA_ZOOKEEPER_CONNECT=zookeeper0.orderer.com:2181,zookeeper1.orderer.com:2181,zookeeper2.orderer.com:2181
+    networks:
+      - basic
+  kafka2.orderer.com:
+    container_name: kafka2.orderer.com
+    image: vizlore/fabric-kafka
+    restart: always
+    environment:
+      - KAFKA_BROKER_ID=2
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - >-
+        KAFKA_ZOOKEEPER_CONNECT=zookeeper0.orderer.com:2181,zookeeper1.orderer.com:2181,zookeeper2.orderer.com:2181
+    networks:
+      - basic
+  kafka3.orderer.com:
+    container_name: kafka3.orderer.com
+    image: vizlore/fabric-kafka
+    restart: always
+    environment:
+      - KAFKA_BROKER_ID=3
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - >-
+        KAFKA_ZOOKEEPER_CONNECT=zookeeper0.orderer.com:2181,zookeeper1.orderer.com:2181,zookeeper2.orderer.com:2181
+    networks:
+      - basic

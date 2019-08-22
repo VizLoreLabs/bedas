@@ -1,0 +1,75 @@
+Organizations:
+    - &orderer
+        Name: orderer
+        ID: OrdererMSP
+        MSPDir: crypto-config/ordererOrganizations/orderer.com/msp
+        AdminPrincipal: Role.MEMBER
+    - &HealthInstitution
+        Name: HealthInstitution
+        ID: HealthInstitutionMSP
+        MSPDir: crypto-config/peerOrganizations/HealthInstitution.peerorg.com/msp
+        AdminPrincipal: Role.MEMBER
+        AnchorPeers:
+           - Host: peer0.machine1.healthinstitution.com
+             Port: 7051
+    - &SRCInfonet
+        Name: SRCInfonet
+        ID: SRCInfonetMSP
+        MSPDir: crypto-config/peerOrganizations/SRCInfonet.peerorg.com/msp
+        AdminPrincipal: Role.MEMBER
+        AnchorPeers:
+           - Host: peer0.machine1.chainrider.dozdravnika.si
+             Port: 7051
+    - &MinistryOfHealth
+        Name: MinistryOfHealth
+        ID: MinistryOfHealthMSP
+        MSPDir: crypto-config/peerOrganizations/MinistryOfHealth.peerorg.com/msp
+        AdminPrincipal: Role.MEMBER
+        AnchorPeers:
+           - Host: peer0.machine1.ministryofhealth.com
+             Port: 7051
+
+
+Orderer: &OrdererDefaults
+    OrdererType: kafka
+    Addresses:
+        - orderer.com:7050
+    BatchTimeout: 1s
+    BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+    Kafka:
+          Brokers:
+             - kafka0.orderer.com:9092
+             - kafka1.orderer.com:9092
+             - kafka2.orderer.com:9092
+             - kafka3.orderer.com:9092
+
+    Organizations:
+
+Application: &ApplicationDefaults
+    Organizations:
+
+Profiles:
+    ComposerOrdererGenesis:
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *orderer
+        Consortiums:
+            orderingConsortium:
+                Organizations:
+                    - *HealthInstitution
+                    - *SRCInfonet
+                    - *MinistryOfHealth
+            
+    ordering:
+        Consortium: orderingConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *HealthInstitution
+                - *SRCInfonet
+                - *MinistryOfHealth
+    

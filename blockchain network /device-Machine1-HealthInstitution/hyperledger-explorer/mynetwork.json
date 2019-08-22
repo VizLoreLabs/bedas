@@ -1,0 +1,87 @@
+{
+    "name": "mynetwork",
+    "version": "1.0.0",
+    "license": "Apache-2.0",
+    "client": {
+        "tlsEnable": false,
+        "adminUser": "admin",
+        "adminPassword": "adminpw",
+        "enableAuthentication": true,
+        "organization": "HealthInstitution",
+        "connection": {
+            "timeout": {
+                "peer": {
+                    "endorser": "3000"
+                },
+                "orderer": "3000"
+            }
+        }
+    },
+    "channels": {
+        "ordering": {
+            "orderers": [
+                "orderer0.orderer.com"
+            ],
+            "peers": {
+                "peer0.machine1.healthinstitution.com": {
+                    "ledgerQuery": true
+                },
+                "peer1.machine1.healthinstitution.com": {
+                    "ledgerQuery": true
+                }
+            },
+            "connection": {
+                "timeout": {
+                    "peer": {
+                        "endorser": "6000",
+                        "eventHub": "6000",
+                        "eventReg": "6000"
+                    }
+                }
+            }
+        }
+    },
+    "organizations": {
+        "HealthInstitution": {
+            "mspid": "HealthInstitutionMSP",
+            "peers": [
+                "peer0.machine1.healthinstitution.com",
+                "peer1.machine1.healthinstitution.com"
+            ],
+            "certificateAuthorities": [
+                "ca.machine1.healthinstitution.com"
+            ],
+            "adminPrivateKey": {
+                "path": "/tmp/crypto/peerOrganizations/HealthInstitution.peerorg.com/users/Admin@HealthInstitution.peerorg.com/msp/keystore/820c1dcc000a0927f90dbd5adf4c99a2b8ab8b1f4c895575ab930cdcdf7ce758_sk"
+            },
+            "signedCert": {
+                "path": "/tmp/crypto/peerOrganizations/HealthInstitution.peerorg.com/users/Admin@HealthInstitution.peerorg.com/msp/signcerts/Admin@HealthInstitution.peerorg.com-cert.pem"
+            }
+        }
+    },
+    "peers": {
+        "peer0.machine1.healthinstitution.com": {
+            "url": "grpc://peer0.machine1.healthinstitution.com:7051",
+            "eventUrl": "grpc://peer0.machine1.healthinstitution.com:7053",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.machine1.healthinstitution.com"
+            }
+        },
+        "peer1.machine1.healthinstitution.com": {
+            "url": "grpc://peer1.machine1.healthinstitution.com:8051",
+            "eventUrl": "grpc://peer1.machine1.healthinstitution.com:8053",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer1.machine1.healthinstitution.com"
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca.machine1.healthinstitution.com": {
+            "url": "http://ca.machine1.healthinstitution.com:7054",
+            "httpOptions": {
+                "verify": false
+            },
+            "caName": "ca.machine1.healthinstitution.com"
+        }
+    }
+}

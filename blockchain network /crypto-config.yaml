@@ -1,0 +1,24 @@
+OrdererOrgs:
+  - Name: Orderer
+    Domain: orderer.com
+    Specs:
+      - Hostname: orderer0
+PeerOrgs:
+  - Name: HealthInstitution
+    Domain: HealthInstitution.peerorg.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  - Name: SRCInfonet
+    Domain: SRCInfonet.peerorg.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  - Name: MinistryOfHealth
+    Domain: MinistryOfHealth.peerorg.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1

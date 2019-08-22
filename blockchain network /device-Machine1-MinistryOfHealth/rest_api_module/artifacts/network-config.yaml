@@ -1,0 +1,179 @@
+name: network-config
+x-type: hlfv1
+description: Custom generated network with ChainRider.io
+version: '1.0'
+channels:
+  ordering:
+    orderers:
+      - orderer0.orderer.com
+    peers:
+      peer0.machine1.healthinstitution.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+      peer1.machine1.healthinstitution.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+      peer0.machine1.chainrider.dozdravnika.si:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+      peer1.machine1.chainrider.dozdravnika.si:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+      peer0.machine1.ministryofhealth.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+      peer1.machine1.ministryofhealth.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+    chaincodes: []
+organizations:
+  HealthInstitution:
+    mspid: HealthInstitutionMSP
+    peers:
+      - peer0.machine1.healthinstitution.com
+      - peer1.machine1.healthinstitution.com
+    certificateAuthorities:
+      - ca.machine1.healthinstitution.com
+    adminPrivateKey:
+      path: >-
+        ./artifacts/channel/crypto-config/peerOrganizations/HealthInstitution.peerorg.com/users/Admin@HealthInstitution.peerorg.com/msp/keystore/820c1dcc000a0927f90dbd5adf4c99a2b8ab8b1f4c895575ab930cdcdf7ce758_sk
+    signedCert:
+      path: >-
+        ./artifacts/channel/crypto-config/peerOrganizations/HealthInstitution.peerorg.com/users/Admin@HealthInstitution.peerorg.com/msp/signcerts/Admin@HealthInstitution.peerorg.com-cert.pem
+  SRCInfonet:
+    mspid: SRCInfonetMSP
+    peers:
+      - peer0.machine1.chainrider.dozdravnika.si
+      - peer1.machine1.chainrider.dozdravnika.si
+    certificateAuthorities:
+      - ca.machine1.chainrider.dozdravnika.si
+    adminPrivateKey:
+      path: >-
+        ./artifacts/channel/crypto-config/peerOrganizations/SRCInfonet.peerorg.com/users/Admin@SRCInfonet.peerorg.com/msp/keystore/8041d4736257073d57f0dbf34b4ea353fcb3fc464397a18c1ade2c93c6b5ce0c_sk
+    signedCert:
+      path: >-
+        ./artifacts/channel/crypto-config/peerOrganizations/SRCInfonet.peerorg.com/users/Admin@SRCInfonet.peerorg.com/msp/signcerts/Admin@SRCInfonet.peerorg.com-cert.pem
+  MinistryOfHealth:
+    mspid: MinistryOfHealthMSP
+    peers:
+      - peer0.machine1.ministryofhealth.com
+      - peer1.machine1.ministryofhealth.com
+    certificateAuthorities:
+      - ca.machine1.ministryofhealth.com
+    adminPrivateKey:
+      path: >-
+        ./artifacts/channel/crypto-config/peerOrganizations/MinistryOfHealth.peerorg.com/users/Admin@MinistryOfHealth.peerorg.com/msp/keystore/41d08783e7d07cc97b82fce68b15a1dadb8e1c11e1243497c2cc733b1b28b285_sk
+    signedCert:
+      path: >-
+        ./artifacts/channel/crypto-config/peerOrganizations/MinistryOfHealth.peerorg.com/users/Admin@MinistryOfHealth.peerorg.com/msp/signcerts/Admin@MinistryOfHealth.peerorg.com-cert.pem
+orderers:
+  orderer0.orderer.com:
+    mspid: OrdererMSP
+    url: 'grpc://orderer.com:7050'
+    grpcOptions:
+      ssl-target-name-override: orderer0.orderer.com
+      'grpc-max-send-messaghttps://ssh.cloud.google.com/projects/vizlorepaymentprocessor/zones/us-central1-a/instances/bcaas?authuser=0&hl=en_US&projectNumber=909161528048e-length': -1
+    tlsCACerts:
+      path: >-
+        ./artifacts/channel/crypto-config/ordererOrganizations/orderer.com/orderers/orderer0.orderer.com/tls/ca.crt
+    adminPrivateKey:
+      path: >-
+        ./artifacts/channel/crypto-config/ordererOrganizations/orderer.com/users/Admin@orderer.com/msp/keystore/2b72db7fbbd5419b2ae9ad9c1d953c6e5b70e574da3c57c2cec0632ece1825e4_sk
+    signedCert:
+      path: >-
+        ./artifacts/channel/crypto-config/ordererOrganizations/orderer.com/users/Admin@orderer.com/msp/signcerts/Admin@orderer.com-cert.pem
+peers:
+  peer0.machine1.healthinstitution.com:
+    url: 'grpc://machine1.healthinstitution.com:7051'
+    eventUrl: 'grpc://machine1.healthinstitution.com:7053'
+    grpcOptions:
+      ssl-target-name-override: peer0.machine1.healthinstitution.com
+    tlsCACerts:
+      path: >-
+        ./artifacts/channel/crypto-config/peerOrganizations/HealthInstitution.peerorg.com/peers/peer0.HealthInstitution.peerorg.com/tls/ca.crt
+  peer1.machine1.healthinstitution.com:
+    url: 'grpc://machine1.healthinstitution.com:8051'
+    eventUrl: 'grpc://machine1.healthinstitution.com:8053'
+    grpcOptions:
+      ssl-target-name-override: peer1.machine1.healthinstitution.com
+    tlsCACerts:
+      path: >-
+        ./artifacts/channel/crypto-config/peerOrganizations/HealthInstitution.peerorg.com/peers/peer1.HealthInstitution.peerorg.com/tls/ca.crt
+  peer0.machine1.chainrider.dozdravnika.si:
+    url: 'grpc://machine1.chainrider.dozdravnika.si:7051'
+    eventUrl: 'grpc://machine1.chainrider.dozdravnika.si:7053'
+    grpcOptions:
+      ssl-target-name-override: peer0.machine1.chainrider.dozdravnika.si
+    tlsCACerts:
+      path: >-
+        ./artifacts/channel/crypto-config/peerOrganizations/SRCInfonet.peerorg.com/peers/peer0.SRCInfonet.peerorg.com/tls/ca.crt
+  peer1.machine1.chainrider.dozdravnika.si:
+    url: 'grpc://machine1.chainrider.dozdravnika.si:8051'
+    eventUrl: 'grpc://machine1.chainrider.dozdravnika.si:8053'
+    grpcOptions:
+      ssl-target-name-override: peer1.machine1.chainrider.dozdravnika.si
+    tlsCACerts:
+      path: >-
+        ./artifacts/channel/crypto-config/peerOrganizations/SRCInfonet.peerorg.com/peers/peer1.SRCInfonet.peerorg.com/tls/ca.crt
+  peer0.machine1.ministryofhealth.com:
+    url: 'grpc://machine1.ministryofhealth.com:7051'
+    eventUrl: 'grpc://machine1.ministryofhealth.com:7053'
+    grpcOptions:
+      ssl-target-name-override: peer0.machine1.ministryofhealth.com
+    tlsCACerts:
+      path: >-
+        ./artifacts/channel/crypto-config/peerOrganizations/MinistryOfHealth.peerorg.com/peers/peer0.MinistryOfHealth.peerorg.com/tls/ca.crt
+  peer1.machine1.ministryofhealth.com:
+    url: 'grpc://machine1.ministryofhealth.com:8051'
+    eventUrl: 'grpc://machine1.ministryofhealth.com:8053'
+    grpcOptions:
+      ssl-target-name-override: peer1.machine1.ministryofhealth.com
+    tlsCACerts:
+      path: >-
+        ./artifacts/channel/crypto-config/peerOrganizations/MinistryOfHealth.peerorg.com/peers/peer1.MinistryOfHealth.peerorg.com/tls/ca.crt
+certificateAuthorities:
+  ca.machine1.healthinstitution.com:
+    url: 'http://machine1.healthinstitution.com:7054'
+    httpOptions:
+      verify: false
+    tlsCACerts:
+      path: >-
+        ./artifacts/channel/crypto-config/peerOrganizations/HealthInstitution.peerorg.com/ca/ca.HealthInstitution.peerorg.com-cert.pem
+    registrar:
+      - enrollId: admin
+        enrollSecret: adminpw
+        caName: ca.machine1.healthinstitution.com
+  ca.machine1.chainrider.dozdravnika.si:
+    url: 'http://machine1.chainrider.dozdravnika.si:7054'
+    httpOptions:
+      verify: false
+    tlsCACerts:
+      path: >-
+        ./artifacts/channel/crypto-config/peerOrganizations/SRCInfonet.peerorg.com/ca/ca.SRCInfonet.peerorg.com-cert.pem
+    registrar:
+      - enrollId: admin
+        enrollSecret: adminpw
+        caName: ca.machine1.chainrider.dozdravnika.si
+  ca.machine1.ministryofhealth.com:
+    url: 'http://machine1.ministryofhealth.com:7054'
+    httpOptions:
+      verify: false
+    tlsCACerts:
+      path: >-
+        ./artifacts/channel/crypto-config/peerOrganizations/MinistryOfHealth.peerorg.com/ca/ca.MinistryOfHealth.peerorg.com-cert.pem
+    registrar:
+      - enrollId: admin
+        enrollSecret: adminpw
+        caName: ca.machine1.ministryofhealth.com

@@ -1,0 +1,87 @@
+{
+    "name": "mynetwork",
+    "version": "1.0.0",
+    "license": "Apache-2.0",
+    "client": {
+        "tlsEnable": false,
+        "adminUser": "admin",
+        "adminPassword": "adminpw",
+        "enableAuthentication": true,
+        "organization": "SRCInfonet",
+        "connection": {
+            "timeout": {
+                "peer": {
+                    "endorser": "3000"
+                },
+                "orderer": "3000"
+            }
+        }
+    },
+    "channels": {
+        "ordering": {
+            "orderers": [
+                "orderer0.orderer.com"
+            ],
+            "peers": {
+                "peer0.machine1.chainrider.dozdravnika.si": {
+                    "ledgerQuery": true
+                },
+                "peer1.machine1.chainrider.dozdravnika.si": {
+                    "ledgerQuery": true
+                }
+            },
+            "connection": {
+                "timeout": {
+                    "peer": {
+                        "endorser": "6000",
+                        "eventHub": "6000",
+                        "eventReg": "6000"
+                    }
+                }
+            }
+        }
+    },
+    "organizations": {
+        "SRCInfonet": {
+            "mspid": "SRCInfonetMSP",
+            "peers": [
+                "peer0.machine1.chainrider.dozdravnika.si",
+                "peer1.machine1.chainrider.dozdravnika.si"
+            ],
+            "certificateAuthorities": [
+                "ca.machine1.chainrider.dozdravnika.si"
+            ],
+            "adminPrivateKey": {
+                "path": "/tmp/crypto/peerOrganizations/SRCInfonet.peerorg.com/users/Admin@SRCInfonet.peerorg.com/msp/keystore/8041d4736257073d57f0dbf34b4ea353fcb3fc464397a18c1ade2c93c6b5ce0c_sk"
+            },
+            "signedCert": {
+                "path": "/tmp/crypto/peerOrganizations/SRCInfonet.peerorg.com/users/Admin@SRCInfonet.peerorg.com/msp/signcerts/Admin@SRCInfonet.peerorg.com-cert.pem"
+            }
+        }
+    },
+    "peers": {
+        "peer0.machine1.chainrider.dozdravnika.si": {
+            "url": "grpc://peer0.machine1.chainrider.dozdravnika.si:7051",
+            "eventUrl": "grpc://peer0.machine1.chainrider.dozdravnika.si:7053",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.machine1.chainrider.dozdravnika.si"
+            }
+        },
+        "peer1.machine1.chainrider.dozdravnika.si": {
+            "url": "grpc://peer1.machine1.chainrider.dozdravnika.si:8051",
+            "eventUrl": "grpc://peer1.machine1.chainrider.dozdravnika.si:8053",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer1.machine1.chainrider.dozdravnika.si"
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca.machine1.chainrider.dozdravnika.si": {
+            "url": "http://ca.machine1.chainrider.dozdravnika.si:7054",
+            "httpOptions": {
+                "verify": false
+            },
+            "caName": "ca.machine1.chainrider.dozdravnika.si"
+        }
+    }
+}

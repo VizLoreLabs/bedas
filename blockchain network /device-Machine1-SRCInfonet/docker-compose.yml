@@ -1,0 +1,107 @@
+version: '2'
+networks:
+  basic: {}
+services:
+  couchdb2:
+    container_name: couchdb2
+    image: 'vizlore/fabric-couchdb:latest'
+    restart: always
+    ports:
+      - '7984:5984'
+    environment:
+      - 'DB_URL: http://localhost:7984/member_db'
+    networks:
+      - basic
+  peer0.machine1.chainrider.dozdravnika.si:
+    container_name: peer0.machine1.chainrider.dozdravnika.si
+    image: 'vizlore/fabric-peer:latest'
+    restart: always
+    environment:
+      - CORE_LOGGING_PEER=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      - >-
+        CORE_PEER_CHAINCODELISTENADDRESS=peer0.machine1.chainrider.dozdravnika.si:7052
+      - 'CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock'
+      - CORE_PEER_ID=peer0.machine1.chainrider.dozdravnika.si
+      - 'CORE_PEER_ADDRESS=peer0.machine1.chainrider.dozdravnika.si:7051'
+      - CORE_PEER_LOCALMSPID=SRCInfonetMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - 'CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984'
+      - 'CORE_PEER_GOSSIP_BOOTSTRAP=peer0.machine1.chainrider.dozdravnika.si:7051'
+      - >-
+        CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.machine1.chainrider.dozdravnika.si:7051
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+      - '7051:7051'
+      - '7053:7053'
+      - '7052:7052'
+    volumes:
+      - '/var/run/:/host/var/run/'
+      - './:/etc/hyperledger/configtx'
+      - >-
+        ./artifacts/channel/crypto-config/peerOrganizations/SRCInfonet.peerorg.com/peers/peer0.SRCInfonet.peerorg.com/msp:/etc/hyperledger/msp/peer
+      - >-
+        ./artifacts/channel/crypto-config/peerOrganizations/SRCInfonet.peerorg.com/users:/etc/hyperledger/msp/users
+    depends_on:
+      - couchdb2
+    networks:
+      - basic
+  peer1.machine1.chainrider.dozdravnika.si:
+    container_name: peer1.machine1.chainrider.dozdravnika.si
+    image: 'vizlore/fabric-peer:latest'
+    restart: always
+    environment:
+      - CORE_LOGGING_PEER=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      - >-
+        CORE_PEER_CHAINCODELISTENADDRESS=peer1.machine1.chainrider.dozdravnika.si:8052
+      - 'CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock'
+      - CORE_PEER_ID=peer1.machine1.chainrider.dozdravnika.si
+      - 'CORE_PEER_ADDRESS=peer1.machine1.chainrider.dozdravnika.si:7051'
+      - CORE_PEER_LOCALMSPID=SRCInfonetMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - 'CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984'
+      - 'CORE_PEER_GOSSIP_BOOTSTRAP=peer0.machine1.chainrider.dozdravnika.si:7051'
+      - >-
+        CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.machine1.chainrider.dozdravnika.si:8051
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+      - '8051:7051'
+      - '8053:7053'
+      - '8052:8052'
+    volumes:
+      - '/var/run/:/host/var/run/'
+      - './:/etc/hyperledger/configtx'
+      - >-
+        ./artifacts/channel/crypto-config/peerOrganizations/SRCInfonet.peerorg.com/peers/peer1.SRCInfonet.peerorg.com/msp:/etc/hyperledger/msp/peer
+      - >-
+        ./artifacts/channel/crypto-config/peerOrganizations/SRCInfonet.peerorg.com/users:/etc/hyperledger/msp/users
+    depends_on:
+      - couchdb2
+    networks:
+      - basic
+  ca.machine1.chainrider.dozdravnika.si:
+    image: 'vizlore/fabric-ca:latest'
+    restart: always
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.machine1.chainrider.dozdravnika.si
+    ports:
+      - '7054:7054'
+    command: >-
+      sh -c 'fabric-ca-server start --ca.certfile
+      /etc/hyperledger/fabric-ca-server-config/ca.SRCInfonet.peerorg.com-cert.pem
+      --ca.keyfile
+      /etc/hyperledger/fabric-ca-server-config/b3a4ecb407f1968aed2a9c4efb4467fd1029085c146196b279e0223fa1e539ea_sk
+      -b admin:adminpw -d'
+    volumes:
+      - >-
+        ./artifacts/channel/crypto-config/peerOrganizations/SRCInfonet.peerorg.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - './fabric-ca-server:/etc/hyperledger/fabric-ca-server'
+    container_name: ca.machine1.chainrider.dozdravnika.si
+    networks:
+      - basic

@@ -1,0 +1,87 @@
+{
+    "name": "mynetwork",
+    "version": "1.0.0",
+    "license": "Apache-2.0",
+    "client": {
+        "tlsEnable": false,
+        "adminUser": "admin",
+        "adminPassword": "adminpw",
+        "enableAuthentication": true,
+        "organization": "MinistryOfHealth",
+        "connection": {
+            "timeout": {
+                "peer": {
+                    "endorser": "3000"
+                },
+                "orderer": "3000"
+            }
+        }
+    },
+    "channels": {
+        "ordering": {
+            "orderers": [
+                "orderer0.orderer.com"
+            ],
+            "peers": {
+                "peer0.machine1.ministryofhealth.com": {
+                    "ledgerQuery": true
+                },
+                "peer1.machine1.ministryofhealth.com": {
+                    "ledgerQuery": true
+                }
+            },
+            "connection": {
+                "timeout": {
+                    "peer": {
+                        "endorser": "6000",
+                        "eventHub": "6000",
+                        "eventReg": "6000"
+                    }
+                }
+            }
+        }
+    },
+    "organizations": {
+        "MinistryOfHealth": {
+            "mspid": "MinistryOfHealthMSP",
+            "peers": [
+                "peer0.machine1.ministryofhealth.com",
+                "peer1.machine1.ministryofhealth.com"
+            ],
+            "certificateAuthorities": [
+                "ca.machine1.ministryofhealth.com"
+            ],
+            "adminPrivateKey": {
+                "path": "/tmp/crypto/peerOrganizations/MinistryOfHealth.peerorg.com/users/Admin@MinistryOfHealth.peerorg.com/msp/keystore/41d08783e7d07cc97b82fce68b15a1dadb8e1c11e1243497c2cc733b1b28b285_sk"
+            },
+            "signedCert": {
+                "path": "/tmp/crypto/peerOrganizations/MinistryOfHealth.peerorg.com/users/Admin@MinistryOfHealth.peerorg.com/msp/signcerts/Admin@MinistryOfHealth.peerorg.com-cert.pem"
+            }
+        }
+    },
+    "peers": {
+        "peer0.machine1.ministryofhealth.com": {
+            "url": "grpc://peer0.machine1.ministryofhealth.com:7051",
+            "eventUrl": "grpc://peer0.machine1.ministryofhealth.com:7053",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.machine1.ministryofhealth.com"
+            }
+        },
+        "peer1.machine1.ministryofhealth.com": {
+            "url": "grpc://peer1.machine1.ministryofhealth.com:8051",
+            "eventUrl": "grpc://peer1.machine1.ministryofhealth.com:8053",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer1.machine1.ministryofhealth.com"
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca.machine1.ministryofhealth.com": {
+            "url": "http://ca.machine1.ministryofhealth.com:7054",
+            "httpOptions": {
+                "verify": false
+            },
+            "caName": "ca.machine1.ministryofhealth.com"
+        }
+    }
+}
